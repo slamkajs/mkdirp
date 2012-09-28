@@ -22,7 +22,7 @@ component output="false" displayname="mkdirp" extends="foundry.core"  {
 	    var noop = function() {}
 
 	    var cb = (_.isFunction(f)) ? f : noop;
-	    if (!isNumeric(mode)) mode = FormatBaseN(LSParseNumber(mode), 8);
+	    //if (!isNumeric(mode)) mode = FormatBaseN(LSParseNumber(mode), 8);
 	    p = path.resolve(p);
 
 	    fs.mkdir(p, mode, function(er) {

@@ -22,18 +22,30 @@ component output="false" displayname="chmod  test" extends="mxunit.framework.Tes
 	variables.file = arrayToList(ps, '/');
 
 	public void function chmod_pre() {
-	    var mode = 0744;
+	    var mode = 'rw';
 	    var mkdirp = new mkdirp();
 	    var collectedPerms = [];
 
 	    mkdirp.mkdirp(file, mode, function (er) {
 	        fs.stat(file, function (er, stat) {
 	        	collectedPerms.append(stat.mode);
+        		assertTrue(stat && stat.isDirectory(), 'should be directory');
+        		assertEquals(stat && stat.mode, mode, 'should be 0744');
 	        });
 	    });
-        // assertTrue(stat && stat.isDirectory(), 'should be directory');
-        // assertEquals(stat && stat.mode & 0777, mode, 'should be 0744');
+        // 
 	}
+
+	// public void function chmod() {
+	//     var mode = 0755
+
+	//     mkdirp(file, mode, function (er) {
+	//         fs.stat(file, function (er, stat) {
+	//             t.ok(stat && stat.isDirectory(), 'should be directory');
+	//             t.end();
+	//         });
+	//     });
+	// }
 
 	public void function setUp() {    
 		console.log("========START========");
