@@ -29,23 +29,28 @@ component output="false" displayname="chmod  test" extends="mxunit.framework.Tes
 	    mkdirp.mkdirp(file, mode, function (er) {
 	        fs.stat(file, function (er, stat) {
 	        	collectedPerms.append(stat.mode);
-        		assertTrue(stat && stat.isDirectory(), 'should be directory');
-        		assertEquals(stat && stat.mode, mode, 'should be 0744');
+        		assertTrue(structKeyExists(arguments, 'stat') && stat.isDirectory, 'should be directory');
+        		assertEquals(structKeyExists(arguments, 'stat') && stat.mode, mode, 'should be 0744');
 	        });
 	    });
-        // 
+
+	    dump(collectedPerms);
 	}
 
-	// public void function chmod() {
-	//     var mode = 0755
+	public void function chmod() {
+	    var mode = 'rw';
+	    var mkdirp = new mkdirp();
+	    var collectedDirs = [];
 
-	//     mkdirp(file, mode, function (er) {
-	//         fs.stat(file, function (er, stat) {
-	//             t.ok(stat && stat.isDirectory(), 'should be directory');
-	//             t.end();
-	//         });
-	//     });
-	// }
+	    mkdirp.mkdirp(file, mode, function (er) {
+	        fs.stat(structKeyExists(arguments, 'file'), function (er, stat) {
+	        	collectedDirs.append(stat.isDirectory);
+	            assertTrue(structKeyExists(arguments, 'stat') && stat.isDirectory(), 'should be directory');
+	        });
+	    });
+
+	    dump(collectedDirs);
+	}
 
 	public void function setUp() {    
 		console.log("========START========");
