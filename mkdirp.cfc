@@ -7,29 +7,33 @@
 */
 
 component output="false" displayname="mkdirp" extends="foundry.core"  {
-	var path = require('path');
-	var fs = require('fs');
-	var _ = require('util');
+	variables.path = require('path');
+	variables.fs = require('fs');
+	variables._ = require('util');
 
-	public any function mkdirP (p, mode, f, made) {
-	    if (_.isFunction(mode) || mode EQ null) {
+	public void function mkdirp (p, mode, f, made) {
+	    if (_.isFunction(mode) || mode EQ '') {
 	        f = mode;
-	        mode = 0777 & (~process.umask());
+	        mode = 0777; // & (~process.umask());
 	    }
-	    if (!made) made = null;
 
-	    var cb = f || function () {};
+	    if (!structKeyExists(arguments, 'made')) made = '';
+
+	    var noop = function() {}
+
+	    var cb = (_.isFunction(f)) ? f : noop;
 	    if (!isNumeric(mode)) mode = FormatBaseN(LSParseNumber(mode), 8);
 	    p = path.resolve(p);
 
 	    fs.mkdir(p, mode, function(er) {
-	        if (!er) {
+	        if (!structKeyExists(arguments, 'er')) {
 	            made = made || p;
 	            return cb(null, made);
 	        }
-	        switch (er.code) {
+
+	        switch (er.errorCode) {
 	            case 'ENOENT':
-	                mkdirP(path.dirname(p), mode, function (er, made) {
+	                mkdirp(path.dirname(p), mode, function (er, made) {
 	                    if (er) cb(er, made);
 	                    else mkdirP(p, mode, cb, made);
 	                });
@@ -38,7 +42,7 @@ component output="false" displayname="mkdirp" extends="foundry.core"  {
 
 	            default:
 	                fs.stat(p, function(er2, stat) {
-	                    if (er2 || !directoryExists(stat)) {
+	                    if (structKeyExists(arguments, 'er2') || !directoryExists(stat)) {
 	                    	cb(er, made);
 	                    } else {
 	                    	cb(null, made);
@@ -51,7 +55,7 @@ component output="false" displayname="mkdirp" extends="foundry.core"  {
 
 	public any function sync(p, mode, made) {
 	    if (mode EQ null) {
-	        mode = 0777 & (~process.umask());
+	        mode = 0777; // & (~process.umask());
 	    }
 	    if (!made) made = null;
 
