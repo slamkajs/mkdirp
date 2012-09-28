@@ -11,7 +11,7 @@ component output="false" displayname="mkdirp" extends="foundry.core"  {
 	var fs = require('fs');
 	var _ = require('util');
 
-	function mkdirP (p, mode, f, made) {
+	public any function mkdirP (p, mode, f, made) {
 	    if (_.isFunction(mode) || mode EQ null) {
 	        f = mode;
 	        mode = 0777 & (~process.umask());
@@ -22,7 +22,7 @@ component output="false" displayname="mkdirp" extends="foundry.core"  {
 	    if (!isNumeric(mode)) mode = FormatBaseN(LSParseNumber(mode), 8);
 	    p = path.resolve(p);
 
-	    fs.mkdir(p, mode, function (er) {
+	    fs.mkdir(p, mode, function(er) {
 	        if (!er) {
 	            made = made || p;
 	            return cb(null, made);
@@ -36,13 +36,8 @@ component output="false" displayname="mkdirp" extends="foundry.core"  {
 	                break;
 
 
-	            // In the case of any other error, just see if theres a dir
-	            // there already.  If so, then hooray!  If not, then something
-	            // is borked.
 	            default:
-	                fs.stat(p, function (er2, stat) {
-	                    // if the stat fails, then that's super weird.
-	                    // let the original error be the failure reason.
+	                fs.stat(p, function(er2, stat) {
 	                    if (er2 || !directoryExists(stat)) {
 	                    	cb(er, made);
 	                    } else {
@@ -53,4 +48,42 @@ component output="false" displayname="mkdirp" extends="foundry.core"  {
 	        }
 	    });
 	}
+
+	public any function sync(p, mode, made) {
+	    if (mode EQ null) {
+	        mode = 0777 & (~process.umask());
+	    }
+	    if (!made) made = null;
+
+	    if (!isNumeric(mode)) mode = FormatBaseN(LSParseNumber(mode), 8);
+	    p = path.resolve(p);
+
+	    try {
+	        fs.mkdir(p, mode);
+	        made = made || p;
+	    } catch (err0) {
+	        switch (err0.code) {
+	            case 'ENOENT':
+	                made = sync(path.dirname(p), mode, made);
+	                sync(p, mode, made);
+	                break;
+
+	            // In the case of any other error, just see if there's a dir
+	            // there already. If so, then hooray! If not, then something
+	            // is borked.
+	            default:
+	                var stat = '';
+	                try {
+	                    stat = fs.statSync(p);
+	                }
+	                catch (err1) {
+	                    throw err0;
+	                }
+	                if (!directoryExists(stat)) throw err0;
+	                break;
+	        }
+	    }
+
+	    return made;
+	};
 }
