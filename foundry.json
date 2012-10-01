@@ -1,0 +1,7 @@
+{
+	"name":"mkdirp",
+	"author":"slamkajs <http://github.com/slamkajs>",
+	"description":"it's like mkdir -p, but in coldfusion",
+	"version":"0.0.1",
+	"main":"./mkdirp"
+}
