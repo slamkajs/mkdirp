@@ -22,13 +22,16 @@ component output="false" displayname="chmod  test" extends="mxunit.framework.Tes
 	variables.file = arrayToList(ps, '/');
 
 	public void function chmod_pre() {
-	    var mode = 'rw';
+	    var mode = 0744;
 	    var mkdirp = new mkdirp();
 	    var collectedPerms = [];
 
 	    mkdirp.mkdirp(file, mode, function (er) {
 	        fs.stat(file, function (er, stat) {
+	        	console.log("this");
+	        	
 	        	collectedPerms.append(stat.mode);
+
         		assertTrue(structKeyExists(arguments, 'stat') && stat.isDirectory, 'should be directory');
         		assertEquals(structKeyExists(arguments, 'stat') && stat.mode, mode, 'should be 0744');
 	        })
@@ -38,12 +41,14 @@ component output="false" displayname="chmod  test" extends="mxunit.framework.Tes
 	}
 
 	public void function chmod() {
-	    var mode = 'rw';
+	    var mode = 0755;
 	    var mkdirp = new mkdirp();
 	    var collectedDirs = [];
 
 	    mkdirp.mkdirp(file, mode, function (er) {
 	        fs.stat(structKeyExists(arguments, 'file'), function (er, stat) {
+	        	console.log("that");
+
 	        	collectedDirs.append(stat.isDirectory);
 
 	            assertTrue(structKeyExists(arguments, 'stat') && stat.isDirectory, 'should be directory');

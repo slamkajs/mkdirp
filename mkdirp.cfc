@@ -26,7 +26,7 @@ component output="false" displayname="mkdirp" extends="foundry.core"  {
 	    p = path.resolve(p);
 
 	    fs.mkdir(p, mode, function(er) {
-	        if (!structKeyExists(arguments, 'er')) {
+	        if (!structKeyExists(arguments, 'er') || _.isEmpty(arguments.er)) {
 	            made = made || p;
 	            return cb(null, made);
 	        }
@@ -38,7 +38,6 @@ component output="false" displayname="mkdirp" extends="foundry.core"  {
 	                    else mkdirP(p, mode, cb, made);
 	                });
 	                break;
-
 
 	            default:
 	                fs.stat(p, function(er2, stat) {
