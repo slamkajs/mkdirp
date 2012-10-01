@@ -10,6 +10,7 @@ component output="false" displayname="chmod  test" extends="mxunit.framework.Tes
 	variables.path = new foundry.core.path();
 	variables.fs = new foundry.core.fs();
 	variables.console = new foundry.core.console();
+	variables._ = new foundry.core.util().init();
 	variables.dir = "";
 
 	variables.ps = ['','tmp'];
@@ -28,12 +29,11 @@ component output="false" displayname="chmod  test" extends="mxunit.framework.Tes
 
 	    mkdirp.mkdirp(file, mode, function (er) {
 	        fs.stat(file, function (er, stat) {
-	        	console.log("this");
-	        	
 	        	collectedPerms.append(stat.mode);
 
         		assertTrue(structKeyExists(arguments, 'stat') && stat.isDirectory, 'should be directory');
-        		assertEquals(structKeyExists(arguments, 'stat') && stat.mode, mode, 'should be 0744');
+        		assertEquals(true, structKeyExists(arguments, 'stat') && !_.isEmpty(stat.mode), 'should exist');
+        		assertEquals(true, stat.mode EQ 'rw', 'should be rw');
 	        })
 ;	    });
 
@@ -47,8 +47,6 @@ component output="false" displayname="chmod  test" extends="mxunit.framework.Tes
 
 	    mkdirp.mkdirp(file, mode, function (er) {
 	        fs.stat(structKeyExists(arguments, 'file'), function (er, stat) {
-	        	console.log("that");
-
 	        	collectedDirs.append(stat.isDirectory);
 
 	            assertTrue(structKeyExists(arguments, 'stat') && stat.isDirectory, 'should be directory');

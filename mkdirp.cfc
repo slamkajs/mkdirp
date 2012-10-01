@@ -9,7 +9,7 @@
 component output="false" displayname="mkdirp" extends="foundry.core"  {
 	variables.path = require('path');
 	variables.fs = require('fs');
-	variables._ = require('util');
+	variables._ = require('util').init();
 
 	public void function mkdirp (p, mode, f, made) {
 	    if (_.isFunction(mode) || mode EQ '') {
@@ -27,8 +27,9 @@ component output="false" displayname="mkdirp" extends="foundry.core"  {
 
 	    fs.mkdir(p, mode, function(er) {
 	        if (!structKeyExists(arguments, 'er') || _.isEmpty(arguments.er)) {
-	            made = made || p;
-	            return cb(null, made);
+	            made = (!_.isEmpty(made)) ? made : p;
+	            cb("", made);
+	            return false;
 	        }
 
 	        switch (er.errorCode) {
@@ -44,7 +45,7 @@ component output="false" displayname="mkdirp" extends="foundry.core"  {
 	                    if (structKeyExists(arguments, 'er2') || !directoryExists(stat)) {
 	                    	cb(er, made);
 	                    } else {
-	                    	cb(null, made);
+	                    	cb("", made);
 	                    }
 	                });
 	                break;
