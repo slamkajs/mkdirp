@@ -31,8 +31,8 @@ component output="false" displayname="chmod  test" extends="mxunit.framework.Tes
 	        	collectedPerms.append(stat.mode);
         		assertTrue(structKeyExists(arguments, 'stat') && stat.isDirectory, 'should be directory');
         		assertEquals(structKeyExists(arguments, 'stat') && stat.mode, mode, 'should be 0744');
-	        });
-	    });
+	        })
+;	    });
 
 	    dump(collectedPerms);
 	}
@@ -45,7 +45,8 @@ component output="false" displayname="chmod  test" extends="mxunit.framework.Tes
 	    mkdirp.mkdirp(file, mode, function (er) {
 	        fs.stat(structKeyExists(arguments, 'file'), function (er, stat) {
 	        	collectedDirs.append(stat.isDirectory);
-	            assertTrue(structKeyExists(arguments, 'stat') && stat.isDirectory(), 'should be directory');
+
+	            assertTrue(structKeyExists(arguments, 'stat') && stat.isDirectory, 'should be directory');
 	        });
 	    });
 
