@@ -6,7 +6,7 @@
 *
 */
 
-component output="false" displayname="chmod  test" extends="mxunit.framework.TestCase"  {
+component output="false" displayname="chmod  test" extends="mxunit.framework.TestCase" {
 	variables.path = new foundry.core.path();
 	variables.fs = new foundry.core.fs();
 	variables.console = new foundry.core.console();
@@ -32,10 +32,10 @@ component output="false" displayname="chmod  test" extends="mxunit.framework.Tes
 	        	collectedPerms.append(stat.mode);
 
         		assertTrue(structKeyExists(arguments, 'stat') && stat.isDirectory, 'should be directory');
-        		assertEquals(true, structKeyExists(arguments, 'stat') && !_.isEmpty(stat.mode), 'should exist');
-        		assertEquals(true, stat.mode EQ 'rw', 'should be rw');
-	        })
-;	    });
+        		assertTrue(structKeyExists(arguments, 'stat') && !_.isEmpty(stat.mode), 'should exist');
+        		assertTrue(stat.mode EQ 'rw', 'should be rw');
+	        });
+	    });
 
 	    dump(collectedPerms);
 	}
