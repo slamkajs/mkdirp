@@ -2,10 +2,10 @@
 *
 * @file  /home/likewise-open/UCADS/slamkajs/Sites/mkdirp/test/clobber.cfc
 * @author  Justin Slamka
-*
+* @description Tests the ability to create a file and then prevent a directoryCreate() via the created file.
 */
 
-component output="false" displayname="" extends="mxunit.framework.TestCase" {
+component output="false" displayname="clobber test" extends="mxunit.framework.TestCase" {
 	variables.path = new foundry.core.path();
 	variables.fs = new foundry.core.fs();
 	variables.console = new foundry.core.console();
@@ -38,6 +38,7 @@ component output="false" displayname="" extends="mxunit.framework.TestCase" {
 	    var mkdirp = new mkdirp();
 
 	   	for(i=1; i <= 2; i++) {
+	   		console.log("Test run ##" & i);
 		    mkdirp.mkdirp(file, 0755, function (err) {
 		        assertTrue(structKeyExists(arguments, 'err'), "err should be defined.");
 		        assertTrue((findNoCase("can't create directory", err.message) GT 0) ? true : false, "err.code should be ENOTDIR");

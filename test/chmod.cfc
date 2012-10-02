@@ -6,7 +6,7 @@
 *
 */
 
-component output="false" displayname="chmod  test" extends="mxunit.framework.TestCase" {
+component output="false" displayname="chmod test" extends="mxunit.framework.TestCase" {
 	variables.path = new foundry.core.path();
 	variables.fs = new foundry.core.fs();
 	variables.console = new foundry.core.console();
