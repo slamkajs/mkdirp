@@ -9,6 +9,7 @@
 component output="false" displayname="mkdirp" extends="foundry.core"  {
 	variables.path = require('path');
 	variables.fs = require('fs');
+    variables.futil = createObject("java","org.apache.commons.io.FileUtils");
 	variables._ = require('util').init();
 
 	public void function mkdirp (p, mode, f, made) {
@@ -25,32 +26,35 @@ component output="false" displayname="mkdirp" extends="foundry.core"  {
 	    //if (!isNumeric(mode)) mode = FormatBaseN(LSParseNumber(mode), 8);
 	    p = path.resolve(p);
 
-	    fs.mkdir(p, mode, function(er) {
-	        if (!structKeyExists(arguments, 'er') || _.isEmpty(arguments.er)) {
-	            made = (!_.isEmpty(made)) ? made : p;
-	            cb("", made);
-	            return false;
-	        }
+	    currFile = createObject("java", "java.io.File").init(p);
 
-	        switch (er.errorCode) {
-	            case 'ENOENT':
-	                mkdirp(path.dirname(p), mode, function (er, made) {
-	                    if (er) cb(er, made);
-	                    else mkdirP(p, mode, cb, made);
-	                });
-	                break;
+	    cb(futil.forceMkdir(currFile));
+	    // fs.mkdir(currFile, mode, function(er) {
+	    //     if (!structKeyExists(arguments, 'er') || _.isEmpty(arguments.er)) {
+	    //         made = (!_.isEmpty(made)) ? made : p;
+	    //         cb("", made);
+	    //         return false;
+	    //     }
 
-	            default:
-	                fs.stat(p, function(er2, stat) {
-	                    if (structKeyExists(arguments, 'er2') || !directoryExists(stat)) {
-	                    	cb(er, made);
-	                    } else {
-	                    	cb("", made);
-	                    }
-	                });
-	                break;
-	        }
-	    });
+	    //     switch (er.errorCode) {
+	    //         case 'ENOENT':
+	    //             mkdirp(path.dirname(p), mode, function (er, made) {
+	    //                 if (er) cb(er, made);
+	    //                 else mkdirP(p, mode, cb, made);
+	    //             });
+	    //             break;
+
+	    //         default:
+	    //             fs.stat(p, function(er2, stat) {
+	    //                 if (structKeyExists(arguments, 'er2') || !directoryExists(stat)) {
+	    //                 	cb(er, made);
+	    //                 } else {
+	    //                 	cb("", made);
+	    //                 }
+	    //             });
+	    //             break;
+	    //     }
+	    // });
 	}
 
 	public any function sync(p, mode, made) {

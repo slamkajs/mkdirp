@@ -7,16 +7,13 @@
 */
 
 component output="false" displayname="mkdirp test" extends="mxunit.framework.TestCase" {
-	variables.path = new foundry.core.path();
-	variables.fs = new foundry.core.fs();
-	variables.console = new foundry.core.console();
-	variables._ = new foundry.core.util().init();
+	variables.path = new foundry.lib.path();
+	variables.fs = new foundry.lib.fs();
+	variables.console = new foundry.lib.console();
+	variables._ = new foundry.lib.util().init();
 
 	public any function woo() {
-		var mkdirp = new mkdirp();
-		var x = 0;
-		var y = 0;
-		var z = 0;
+		var mkdirp = new mkdirp.mkdirp();
 		var file = "";
 
 	   	for(i=1; i <= 2; i++) {
@@ -26,10 +23,10 @@ component output="false" displayname="mkdirp test" extends="mxunit.framework.Tes
 		    	[formatBaseN(int(rand() * (16^4)), 16).toString(),
 		    	formatBaseN(int(rand() * (16^4)), 16).toString(),
 		    	formatBaseN(int(rand() * (16^4)), 16).toString()], '/');
-		    
+
 		    mkdirp.mkdirp(file, 0755, function (err) {
 		        if(structKeyExists(arguments, 'err') && !_.isEmpty(err)) fail(err);
-		        else path.exists(file, function(ex) {
+		        else fs.exists(file, function(ex) {
 			            if(!structKeyExists(arguments, 'ex') || !ex) fail('file not created');
 			            else fs.stat(file, function (err, stat) {
 				                if (structKeyExists(arguments, 'err') && !_.isEmpty(err)) fail(err);
